@@ -5,7 +5,7 @@ public class GumballMachine implements IGumballMachine {
     final String NO_QUARTER = GumballMachineState.NO_QUARTER.name();
     final String HAS_QUARTER = GumballMachineState.HAS_QUARTER.name();
     final String SOLD = GumballMachineState.GUMBALL_SOLD.name();
-    private String id;
+    private String id;//
     String state = SOLD_OUT;
     int count = 0;
 
