@@ -19,11 +19,21 @@ public class GumballService implements IGumballService{
         this.gumballRepository = gumballRepository;
     }
 
-    @Override
-    public TransitionResult insertQuarter(String id) throws IOException {
+    public TransitionResult doAction(String id, int action) throws IOException {
         GumballMachineRecord record = gumballRepository.findById(id);
         IGumballMachine machine = new GumballMachine(record.getId(), record.getState(), record.getCount());
-        TransitionResult result = machine.insertQuarter();
+        TransitionResult result = null;
+        switch(action) {
+            case 1:
+                 result = machine.insertQuarter();
+                 break;
+            case 2:
+                 result = machine.ejectQuarter();
+                 break;
+            case 3:
+                 result = machine.turnCrank();
+                 break;
+        }
         if(result.succeeded()) {
             record.setState(result.stateAfter());
             record.setCount(result.countAfter());
@@ -31,31 +41,19 @@ public class GumballService implements IGumballService{
         }
         return result;
     }
+    @Override
+    public TransitionResult insertQuarter(String id) throws IOException {
+        return doAction(id, 1);
+    }
 
     @Override
     public TransitionResult ejectQuarter(String id) throws IOException {
-        GumballMachineRecord record = gumballRepository.findById(id);
-        IGumballMachine machine = new GumballMachine(record.getId(), record.getState(), record.getCount());
-        TransitionResult result = machine.ejectQuarter();
-        if (result.succeeded()) {
-            record.setState(result.stateAfter());
-            record.setCount(result.countAfter());
-            save(record);
-        }
-        return result;
+        return doAction(id, 2);
     }
 
     @Override
     public TransitionResult turnCrank(String id) throws IOException {
-        GumballMachineRecord record = gumballRepository.findById(id);
-        IGumballMachine machine = new GumballMachine(record.getId(), record.getState(), record.getCount());
-        TransitionResult result = machine.turnCrank();
-        if (result.succeeded()) {
-            record.setState(result.stateAfter());
-            record.setCount(result.countAfter());
-            save(record);
-        }
-        return result;
+        return doAction(id, 3);
     }
 
     
