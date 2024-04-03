@@ -35,16 +35,49 @@ public class GumballMachine implements IGumballMachine {
 
     @Override
     public TransitionResult ejectQuarter() {
-        //TODO
-        return null;
+        boolean succeeded = false;
+        String message = "";
+        if (state.equalsIgnoreCase(HAS_QUARTER)) {
+            state = NO_QUARTER;
+            message = "Quarter ejected";
+            succeeded = true;
+        } else if (state.equalsIgnoreCase(NO_QUARTER)) {
+            message = "You haven't inserted a quarter";
+        } else if (state.equalsIgnoreCase(SOLD_OUT)) {
+            message = "You can't eject, you haven't inserted a quarter";
+        } else if (state.equalsIgnoreCase(SOLD)) {
+            message = "Sorry, you already turned the crank";
+        }
+        return new TransitionResult(succeeded, message, state, count);
     }
-
     @Override
     public TransitionResult turnCrank() {
-        //TODO
-        return null;
+        boolean succeeded = false;
+        String message = "";
+        if (state.equalsIgnoreCase(HAS_QUARTER)) {
+            if (count > 0) {
+                state = SOLD;
+                releaseBall(); // Dispense the gumball
+                message = "Turned crank!";
+                succeeded = true;
+                if (count == 0) {
+                    state = SOLD_OUT;
+                } else {
+                    state = NO_QUARTER;
+                }
+            } else {
+                message = "No gumballs in stock";
+                state = SOLD_OUT;
+            }
+        } else if (state.equalsIgnoreCase(NO_QUARTER)) {
+            message = "You need to insert a quarter first";
+        } else if (state.equalsIgnoreCase(SOLD_OUT)) {
+            message = "The machine is sold out";
+        } else if (state.equalsIgnoreCase(SOLD)) {
+            message = "Please wait, we're already giving you a gumball";
+        }
+        return new TransitionResult(succeeded, message, state, count);
     }
-
     @Override
     public void changeTheStateTo(GumballMachineState name) {
 
@@ -62,7 +95,9 @@ public class GumballMachine implements IGumballMachine {
 
     @Override
     public void releaseBall() {
-
+        if (count > 0) {
+            count--;
+        }
     }
 
 
