@@ -78,6 +78,12 @@ public class GumballMachine implements IGumballMachine {
         }
         return new TransitionResult(succeeded, message, state, count);
     }
+
+    @Override
+    public void refill(int count) {
+        this.count = count;
+    }
+
     @Override
     public void changeTheStateTo(GumballMachineState name) {
 

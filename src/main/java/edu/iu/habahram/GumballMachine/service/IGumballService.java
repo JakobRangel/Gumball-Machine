@@ -15,6 +15,7 @@ public interface IGumballService {
 
     GumballMachineRecord findById(String id) throws IOException;
 
+    void refill(String id, int count) throws IOException;
     String save(GumballMachineRecord gumballMachineRecord) throws IOException;
 
 }

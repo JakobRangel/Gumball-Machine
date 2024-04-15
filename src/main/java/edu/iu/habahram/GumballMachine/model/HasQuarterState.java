@@ -46,6 +46,12 @@ public class HasQuarterState implements IState {
     }
 
     @Override
+    public void refill(int count) {
+        gumballMachine.refill(count);
+
+    }
+
+    @Override
     public String getTheName() {
         return GumballMachineState.NO_QUARTER.name();
     }

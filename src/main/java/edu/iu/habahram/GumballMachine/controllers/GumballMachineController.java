@@ -6,6 +6,7 @@ import edu.iu.habahram.GumballMachine.model.TransitionResult;
 import edu.iu.habahram.GumballMachine.repository.IGumballRepository;
 import edu.iu.habahram.GumballMachine.service.IGumballService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,5 +63,10 @@ public class GumballMachineController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    @PutMapping("/refill")
+    public void refillMachine(@RequestBody TransitionRequest request) throws IOException {
+        System.out.println(request.id() + "ct: " + request.count());
+        gumballService.refill(request.id(), request.count());
     }
 }
